@@ -1,0 +1,7 @@
+Hello <%= node['kernel']['release']  %>!
+ 
+This computer has <%= node['cpu']['total'] %> CPUs!
+ 
+<% if node['kernel']['release'] == false -%>
+There will be no encore
+<% end -%>

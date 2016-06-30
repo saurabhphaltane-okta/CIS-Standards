@@ -1,0 +1,17 @@
+# Kernel sysctl configuration file for Red Hat Linux
+# #
+# # For binary values, 0 is disabled, 1 is enabled.  See sysctl(8) and
+# # sysctl.conf(5) for more details.
+#
+# # Controls IP packet forwarding
+
+
+
+<% node['net.ipv4.conf']['all'].each do |network_conf| -%>
+
+replace_or_add "<%= network_conf.parameter %>=<%= network_conf.value %>" do    
+   path "<%= node['sysctl']['conf'] %>"
+   pattern "<%= network_conf.parameter %>.*"
+   line "<%= network_conf.parameter %>=<%= network_conf.value %>"
+end
+<% end -%>

@@ -1,0 +1,13 @@
+#ysctl configuration file for Red Hait Linux
+#
+# For binary values, 0 is disabled, 1 is enabled.  See sysctl(8) and
+# sysctl.conf(5) for more details.
+
+
+<% node['sysctl']['network'].each do |network_conf| -%>
+
+<%= network_conf.comment %>
+<%= network_conf.parameter %>=<%= network_conf.value %> 
+
+<% end -%>
+

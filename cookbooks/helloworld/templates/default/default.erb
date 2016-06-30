@@ -1,0 +1,15 @@
+#This file is managed by chef. 
+#
+#
+
+
+
+Hello <%= node['helloworld']['place'] %>!
+
+
+this computer has <%= node['cpu']['total']%> CPU !!
+
+<% if node['helloworld'][encore] == false -%>
+there will be no encore
+
+<% end -%>
