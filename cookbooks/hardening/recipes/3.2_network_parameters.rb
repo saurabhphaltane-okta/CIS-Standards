@@ -16,12 +16,28 @@
 #3.2.1 Ensure source routed packets are not accepted
 
 
-template '/tmp/sysctl.conf' do
+template node['sysctl']['conf'] do
   source 'sysctl.conf.erb'
  # variables({
  # :network_var => node['configs']['config_var']
 #})
 end
+
+node['sysctl']['conf'].each do |sysctl_parameter|
+
+execute "#{sysctl_parameter.parameter} = #{sysctl_parameter.value}" do
+  command "/sbin/sysctl -w #{sysctl_parameter.parameter} = #{sysctl_parameter.value}"
+  not_if "/sbin/sysctl -q -n #{sysctl_parameter.parameter} | /usr/bin/grep #{sysctl_parameter.value}"
+
+end
+
+
+ execute 'net.ipv4.route.flush=1' do
+    command '/sbin/sysctl -w net.ipv4.route.flush=1'
+        not_if '/sbin/sysctl -q -n net.ipv4.route.flush | /usr/bin/grep 1'
+    end
+
+
 
 # replace_or_add "#{node['net.ipv4.conf']['all']['accept_source_route']['parameter']} = #{node['net.ipv4.conf']['all']['accept_source_route']['status']}" do
 #    path "#{node['sysctl']['conf']}"
