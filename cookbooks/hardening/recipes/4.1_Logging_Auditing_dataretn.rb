@@ -88,10 +88,28 @@ service auditd do
 
 #4.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored)
 
+template '/etc/audit/auditd.conf' do
+  source 'auditd.conf.erb'
+  owner 'root'
+  group 'root'
+  mode 00640
+  variables(
+    :admin_space_left_action=> node['auditd']['admin_space_left_action'],
+    :space_left_action =>  node['auditd']['space_left_action'],
+    :max_log_file_action => node['auditd']['mac_log_file_action'],
+    :action_mail_acct => node['auditd']['action_mail_acct'],
+    :action_max_log_file => node['auditd']['max_log_file'] )
+  notifies :restart, 'service[auditd]'
+end
 
 
-
-
+#default['auditd']['max_log_file']=6
+#4.1.1.2 Ensure system is disabled when audit logs are full 
+#default['auditd']['space_left_action']='email'
+#default['auditd']['action_mail_acct']='root'
+#default['auditd']['admin_space_left_action']='halt'
+##4.1.1.3 Ensure audit logs are not automatically deleted
+#default['auditd']['max_log_file_action']='keep_logs'
 
 
 

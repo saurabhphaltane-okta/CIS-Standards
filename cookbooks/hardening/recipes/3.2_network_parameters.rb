@@ -23,19 +23,19 @@ template node['sysctl']['conf'] do
 #})
 end
 
-node['sysctl']['conf'].each do |sysctl_parameter|
+node['sysctl']['network'].each do |sysctl_parameter|
 
 execute "#{sysctl_parameter.parameter} = #{sysctl_parameter.value}" do
-  command "/sbin/sysctl -w #{sysctl_parameter.parameter} = #{sysctl_parameter.value}"
+  command "/sbin/sysctl -w #{sysctl_parameter.parameter}=#{sysctl_parameter.value}"
   not_if "/sbin/sysctl -q -n #{sysctl_parameter.parameter} | /usr/bin/grep #{sysctl_parameter.value}"
 
+  end
 end
 
-
- execute 'net.ipv4.route.flush=1' do
+execute 'net.ipv4.route.flush=1' do
     command '/sbin/sysctl -w net.ipv4.route.flush=1'
-        not_if '/sbin/sysctl -q -n net.ipv4.route.flush | /usr/bin/grep 1'
-    end
+    not_if '/sbin/sysctl -q -n net.ipv4.route.flush | /usr/bin/grep 1'
+end
 
 
 

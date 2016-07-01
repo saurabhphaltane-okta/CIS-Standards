@@ -3,7 +3,6 @@
 default['sysctl']['conf']='/opt/sysctl.conf'
 
 
-
 #3 CIS Network Configuration
 default['sysctl']['network'] = [ 
                                       { comment:"#3.2.1 Ensure source routed packets are not accepted",
@@ -39,17 +38,17 @@ default['sysctl']['network'] = [
                                       },
                                       {
                                       comment: "#3.2.4  Addresses Log Suspicious Packets",
-                                      parameter:"enable_update_net.ipv4.conf.all.log_martians",
+                                      parameter:"net.ipv4.conf.all.log_martians",
                                       value: "1"
                                       },
                                       {
                                       comment: "#3.2.4  Addresses Log Suspicious Packets(default)",
-                                      parameter:"enable_update_net.ipv4.conf.default.log_martians",
+                                      parameter:"net.ipv4.conf.default.log_martians",
                                       value: "1"
                                       },
                                       {
                                       comment: "#3.2.5 Ensure broadcast ICMP requests are ignored",
-                                      parameter: "enable_net.ipv4.conf.default.log_martians",
+                                      parameter: "net.ipv4.conf.default.log_martians",
                                       value: "1"
                                       },
 
@@ -67,7 +66,7 @@ default['sysctl']['network'] = [
 
                                       {
                                       comment: "#3.2.7.2 Ensure Reverse Path Filtering is enabled ",
-                                      parameter: "net.ipv4.conf.default.rp_filter = 1",
+                                      parameter: "net.ipv4.conf.default.rp_filter",
                                       value: "1"
                                       },
                                       {
@@ -77,3 +76,19 @@ default['sysctl']['network'] = [
                                       },
 
                                       ]
+
+
+
+
+default['audit']['conf']='/etc/audit/auditd.conf'
+
+#4.1 Configure System Accounting (auditd)
+
+default['auditd']['max_log_file']=6
+#4.1.1.2 Ensure system is disabled when audit logs are full 
+default['auditd']['space_left_action']='email'
+default['auditd']['action_mail_acct']='root'
+default['auditd']['admin_space_left_action']='halt'
+#4.1.1.3 Ensure audit logs are not automatically deleted
+default['auditd']['max_log_file_action']='keep_logs'
+
