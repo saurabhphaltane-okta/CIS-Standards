@@ -41,52 +41,43 @@
 #4.1.1.1 Ensure audit log storage size is configured 
 
 
-replace_or_add '/etc/audit/auditd.conf' do
-      path '/etc/audit/auditd.conf'
-      pattern 'max_log_file.*'
-      line 'max_log_file = 6'
-end
+#replace_or_add '/etc/audit/auditd.conf' do
+#     path '/etc/audit/auditd.conf'
+#      pattern 'max_log_file.*'
+#      line 'max_log_file = 6'
+#end
 
 #4.1.1.2 Ensure system is disabled when audit logs are full 
 
-replace_or_add 'space_left_action = email' do
-      path '/etc/audit/auditd.conf'
-      pattern 'space_left_action.*'
-      line 'space_left_action = email'
-end
+#replace_or_add 'space_left_action = email' do
+#      path '/etc/audit/auditd.conf'
+#      pattern 'space_left_action.*'
+#      line 'space_left_action = email'
+#end
 
-replace_or_add 'action_mail_acct = root' do
-      path '/etc/audit/auditd.conf'
-      pattern 'action_mail_acct.*'
-      line 'space_left_action = email'
-end
+#replace_or_add 'action_mail_acct = root' do
+#      path '/etc/audit/auditd.conf'
+#      pattern 'action_mail_acct.*'
+#      line 'space_left_action = email'
+#end
 
 
-replace_or_add 'admin_space_left_action = halt' do
-      path '/etc/audit/auditd.conf'
-      pattern 'admin_space_left_action.*'
-      line 'admin_space_left_action = halt'
-end
+#replace_or_add 'admin_space_left_action = halt' do
+#      path '/etc/audit/auditd.conf'
+#      pattern 'admin_space_left_action.*'
+#      line 'admin_space_left_action = halt'
+#end
 
 
 #4.1.1.3 Ensure audit logs are not automatically deleted
 
 
-replace_or_add 'max_log_file_action = keep_logs' do
-      path '/etc/audit/auditd.conf'
-      pattern 'max_log_file_action.*'
-      line 'max_log_file_action = keep_logs'
-end
+#replace_or_add 'max_log_file_action = keep_logs' do
+#      path '/etc/audit/auditd.conf'
+#      pattern 'max_log_file_action.*'
+#      line 'max_log_file_action = keep_logs'
+#end
 
-
-
-#4.1.2 Ensure auditd service is enabled 
-
-service auditd do
-    action [:enable]
- end
-
-#4.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored)
 
 template '/etc/audit/auditd.conf' do
   source 'auditd.conf.erb'
@@ -96,12 +87,33 @@ template '/etc/audit/auditd.conf' do
   variables(
     :admin_space_left_action=> node['auditd']['admin_space_left_action'],
     :space_left_action =>  node['auditd']['space_left_action'],
-    :max_log_file_action => node['auditd']['mac_log_file_action'],
+    :max_log_file_action => node['auditd']['max_log_file_action'],
     :action_mail_acct => node['auditd']['action_mail_acct'],
     :action_max_log_file => node['auditd']['max_log_file'] )
   notifies :restart, 'service[auditd]'
 end
 
+
+
+
+template '/etc/audit/audit.rules' do
+  source 'audit.rules.erb'
+  owner 'root'
+  group 'root'
+  mode 00640
+end
+
+
+
+
+
+#4.1.2 Ensure auditd service is enabled 
+
+service 'auditd' do
+    action [:enable]
+ end
+
+#4.1.3 Ensure auditing for processes that start prior to auditd is enabled (Scored)
 
 #default['auditd']['max_log_file']=6
 #4.1.1.2 Ensure system is disabled when audit logs are full 

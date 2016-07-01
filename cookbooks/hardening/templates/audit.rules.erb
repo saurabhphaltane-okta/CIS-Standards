@@ -1,0 +1,100 @@
+# This file contains the auditctl rules that are loaded
+# whenever the audit daemon is started via the initscripts.
+# The rules are simply the parameters that would be passed
+# to auditctl.
+
+# First rule - delete all
+-D
+
+# Increase the buffers to survive stress events.
+# Make this bigger for busy systems
+-b 320
+
+# Disable system call auditing.
+# Remove the following line if you need the auditing.
+-a never,task
+
+# Feel free to add below this line. See auditctl man page
+
+
+#4.1.4 Ensure events that modify date and time information are collected
+
+<%= render "4.1.4_auditd_date_time.erb" -%>
+
+
+#4.1.5 Ensure events that modify user/group information are collected
+
+<%= render "4.1.5_auditd_user_groupinfo.erb" -%>
+
+
+#4.1.6 Ensure events that modify the system's network environment are collected 
+
+
+
+<%= render "4.1.6_audit_systemnetwk_info.erb" -%>
+
+
+#4.1.8 Ensure login and logout events are collected 
+
+
+<%= render "4.1.8_audit_login_logout.erb" -%>
+
+#4.1.9 Ensure session initiation information is collected 
+
+
+<%= render "4.1.9_audit_session_initation.erb"-%>
+
+
+#4.1.10 Ensure discretionary access control permission modification events are collected 
+
+
+<%== render "4.1.10_audit_dac_permission.erb" -%>
+
+#4.1.11 Ensure unsuccessful unauthorized file access attempts are collected
+
+<%= render "4.1.11_unauthrorized_access.erb" -%>
+
+
+
+#4.1.12 Ensure use of privileged commands is collected 
+
+
+#4.1.13 Ensure successful file system mounts are collected
+
+<%= render "4.1.13_successful_file_system_mounts.erb"-%>
+
+#4.1.14 Ensure file deletion events by users are collected
+
+
+<%= render "4.1.14_audit_file_deletion.erb"-%>
+
+
+
+#4.1.15 Ensure changes to system administration scope
+
+
+<%= render "4.1.15_audit_system_changes.erb" -%>
+
+
+
+
+#4.1.16 Ensure system administrator actions (sudolog) are collected
+
+
+
+<%= render "4.1.16_audit_system_adminsudo_changes.erb"-%>
+
+
+
+#4.1.17 Ensure kernel module loading and unloading is collected
+
+
+<%= render "4.1.17_audit_kernel_load_unloading.erb" -%>
+
+
+
+
+#4.1.18 Ensure the audit configuration is immutable (Scored)
+
+
+-e 2
